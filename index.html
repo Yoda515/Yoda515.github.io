@@ -13,43 +13,22 @@
 <meta name="apple-mobile-web-app-title" content="Carnet de bord" />
 <link rel="icon" href="icons/icon-192.png" />
 
-<!-- ===================================================================
-     BIBLIOTHÈQUES : fichier local d'abord, Internet en secours.
-     Dans l'application installée, tout est embarqué (dossier vendor/) :
-     elle démarre donc même sans réseau — c'est ce qui provoquait un écran
-     noir lorsqu'un seul de ces fichiers n'arrivait pas à se charger.
-     Sur le site web, si le dossier vendor/ n'est pas en ligne, le
-     chargement bascule automatiquement sur les CDN.
-     =================================================================== -->
-<link rel="stylesheet" href="vendor/tailwind.css" />
-<script src="vendor/react.min.js"></script>
-<script>window.React || document.write('<scr'+'ipt src="https://unpkg.com/react@18/umd/react.production.min.js"><\/scr'+'ipt>');</script>
-<script src="vendor/react-dom.min.js"></script>
-<script>window.ReactDOM || document.write('<scr'+'ipt src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"><\/scr'+'ipt>');</script>
-<script src="vendor/firebase-app-compat.js"></script>
-<script>window.firebase || document.write('<scr'+'ipt src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"><\/scr'+'ipt>');</script>
-<script src="vendor/firebase-auth-compat.js"></script>
-<script>(window.firebase && firebase.auth) || document.write('<scr'+'ipt src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"><\/scr'+'ipt>');</script>
-<script src="vendor/firebase-firestore-compat.js"></script>
-<script>(window.firebase && firebase.firestore) || document.write('<scr'+'ipt src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"><\/scr'+'ipt>');</script>
-<script src="vendor/firebase-functions-compat.js"></script>
-<script>(window.firebase && firebase.functions) || document.write('<scr'+'ipt src="https://www.gstatic.com/firebasejs/10.12.2/firebase-functions-compat.js"><\/scr'+'ipt>');</script>
-<script src="vendor/babel.min.js"></script>
-<script>window.Babel || document.write('<scr'+'ipt src="https://unpkg.com/@babel/standalone/babel.min.js"><\/scr'+'ipt>');</script>
-<script src="vendor/jspdf.umd.min.js"></script>
-<script src="vendor/jspdf.plugin.autotable.min.js"></script>
-<script>
-  // Si la feuille de style locale est absente (site web sans dossier vendor/),
-  // on charge Tailwind depuis Internet pour conserver la mise en page.
-  (function verifierStyles() {
-    var t = document.createElement("div");
-    t.className = "hidden";
-    document.documentElement.appendChild(t);
-    var ok = getComputedStyle(t).display === "none";
-    document.documentElement.removeChild(t);
-    if (!ok) document.write('<scr'+'ipt src="https://cdn.tailwindcss.com"><\/scr'+'ipt>');
-  })();
-</script>
+<!-- Bibliothèques web — chargement direct pour GitHub Pages -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script crossorigin="anonymous" src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin="anonymous" src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-functions-compat.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+<!-- Google AdSense — version web uniquement -->
+<script async data-adsense="1"
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2682887044167463"
+  crossorigin="anonymous"></script>
 
 <style>
   /* CSS volontairement minimal : aucune contrainte de hauteur ni de défilement.
@@ -3483,16 +3462,7 @@ function EncartAdSense({ client, slot }) {
 
   React.useEffect(() => {
     if (estNatif || !client || !slot) return;
-    // Charge le script officiel Google AdSense une seule fois
-    const url = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${encodeURIComponent(client)}`;
-    if (!document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]')) {
-      const s = document.createElement("script");
-      s.src = url;
-      s.async = true;
-      s.crossOrigin = "anonymous";
-      s.setAttribute("data-adsense", "1");
-      document.head.appendChild(s);
-    }
+    // Le script AdSense est déjà chargé une seule fois dans le <head>.
     // Demande l'affichage de l'annonce (ignoré silencieusement si le script est bloqué)
     const t = setTimeout(() => {
       try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { /* bloqueur de pub ou script indisponible */ }
